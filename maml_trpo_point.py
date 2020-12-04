@@ -18,7 +18,7 @@ fast_learning_rates = [0.5]
 baselines = ['linear']
 fast_batch_size = 20  # 10 works for [0.1, 0.2], 20 doesn't improve much for [0,0.2]
 meta_batch_size = 40  # 10 also works, but much less stable, 20 is fairly stable, 40 is more stable
-max_path_length = 100
+max_path_length = 10
 num_grad_updates = 1
 meta_step_size = 0.01
 
@@ -35,7 +35,7 @@ for fast_learning_rate in fast_learning_rates:
                 env_spec=env.spec,
                 grad_step_size=fast_learning_rate,
                 hidden_nonlinearity=tf.nn.relu,
-                hidden_sizes=(100,100),
+                hidden_sizes=(10,10),
             )
             if bas == 'zero':
                 baseline = ZeroBaseline(env_spec=env.spec)
@@ -51,7 +51,7 @@ for fast_learning_rate in fast_learning_rates:
                 max_path_length=max_path_length,
                 meta_batch_size=meta_batch_size,
                 num_grad_updates=num_grad_updates,
-                n_itr=100,
+                n_itr=1,
                 use_maml=use_maml,
                 step_size=meta_step_size,
                 plot=False,
