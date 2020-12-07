@@ -51,14 +51,14 @@ for fast_learning_rate in fast_learning_rates:
                 max_path_length=max_path_length,
                 meta_batch_size=meta_batch_size,
                 num_grad_updates=num_grad_updates,
-                n_itr=1,
+                n_itr=2,
                 use_maml=use_maml,
                 step_size=meta_step_size,
                 plot=False,
             )
             run_experiment_lite(
                 algo.train(),
-                n_parallel=1,
+                n_parallel=2,
                 snapshot_mode="last",
                 python_command='python3',
                 seed=1,
