@@ -39,7 +39,7 @@ class MiniGridEnvRand(Env, Serializable):
         return np.random.randint(len(self._genomes), size=(num_goals,))
 
     def step(self, action):
-        state, reward, done = self._maze.step(action)
+        state, reward, done, _ = self._maze.step(action)
         return Step(observation=state, reward=reward, done=done)
 
     @property
