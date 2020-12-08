@@ -51,5 +51,6 @@ class MiniGridEnvRand(Env, Serializable):
         return Box(
             low=0,
             high=255,
-            shape=((self._maze.agent_view_size, self._maze.agent_view_size, 3),1))
+            shape=(self._maze.agent_view_size*self._maze.agent_view_size*3+1,1)
+        )
 
