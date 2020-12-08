@@ -21,12 +21,12 @@ class MiniGridEnvRand(Env, Serializable):
 
     def reset(self, reset_args=None):
         if reset_args is not None:
-            self._maze.lava_prob = reset_args['lava_prob']
-            self._maze.obstacle_level = reset_args['obstacle_level']
-            self._maze.box2ball = reset_args['box2ball']
-            self._maze.door_prob = reset_args['door_prob']
-            self._maze.wall_prob = reset_args['wall_prob']
-            self._maze.seed = reset_args['seed']
+            self._maze.lava_prob = reset_args[0]
+            self._maze.obstacle_level = reset_args[1]
+            self._maze.box2ball = reset_args[2]
+            self._maze.door_prob = reset_args[3]
+            self._maze.wall_prob = reset_args[4]
+            self._maze.seed = reset_args[5]
         self._maze.reset()
 
         return self._maze.gen_obs()
@@ -40,14 +40,7 @@ class MiniGridEnvRand(Env, Serializable):
     def sample_goal(self):
         if self._genomes is not None:
             #TODO: modify the goal to be a sample from list of genomes
-            goal = {
-                'lava_prob': 0,
-                'obstacle_level': 0,
-                'box2ball': 0,
-                'door_prob': 0,
-                'wall_prob': 1,
-                'seed': 0
-            }
+            goal = [0,0,0,0,1,0]
         else:
             goal = None
         return goal
