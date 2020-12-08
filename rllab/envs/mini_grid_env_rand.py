@@ -13,37 +13,29 @@ class MiniGridEnvRand(Env, Serializable):
         self._maze = MazeEnv()
         if genomes is not None:
             self._genomes = genomes
-            self.reset(self.sample_goal())
+            genome_num = np.random.randint(len(self._genomes),1)
+            self.reset(genome_num)
         else:
-            self._genomes = None
+            self._genomes = [None]
             self.reset()
 
 
     def reset(self, reset_args=None):
         if reset_args is not None:
-            self._maze.lava_prob = reset_args[0]
-            self._maze.obstacle_level = reset_args[1]
-            self._maze.box2ball = reset_args[2]
-            self._maze.door_prob = reset_args[3]
-            self._maze.wall_prob = reset_args[4]
-            self._maze.seed = reset_args[5]
-        self._maze.reset()
+            genome = self._genomes[reset_args]
+            #TODO: use the genome to set each gene to a value sampled from the provided ranges
+            self._maze.lava_prob = 0
+            self._maze.obstacle_level = 0
+            self._maze.box2ball = 0
+            self._maze.door_prob = 0
+            self._maze.wall_prob = 1
+            self._maze.seed = 0
+            self._maze.reset()
 
         return self._maze.gen_obs()
 
     def sample_goals(self, num_goals):
-        goals = []
-        for i in range(num_goals):
-            goals.append(self.sample_goal())
-        return goals
-
-    def sample_goal(self):
-        if self._genomes is not None:
-            #TODO: modify the goal to be a sample from list of genomes
-            goal = [0,0,0,0,1,0]
-        else:
-            goal = None
-        return goal
+        return np.random.randint(len(self._genomes), size=(num_goals,))
 
     def step(self, action):
         state, reward, done = self._maze.step(action)
