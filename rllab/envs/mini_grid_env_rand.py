@@ -1,9 +1,10 @@
 import numpy as np
 from .base import Env
 from rllab.spaces import Discrete
+from rllab.spaces import Box
 from rllab.envs.base import Step
 from rllab.core.serializable import Serializable
-from gym_minigrid.gym_minigrid.envs.mazeEnv import MazeEnv
+from gym_minigrid.envs.mazeEnv import MazeEnv
 
 class MiniGridEnvRand(Env, Serializable):
     
@@ -37,9 +38,12 @@ class MiniGridEnvRand(Env, Serializable):
 
     @property
     def action_space(self):
-        return self._maze.action_space
+        return Discrete(len(self._maze.actions))
 
     @property
     def observation_space(self):
-        return self._maze.observation_space
+        return Box(
+            low=0,
+            high=255,
+            shape=(self._maze.agent_view_size, self._maze.agent_view_size, 3))
 
