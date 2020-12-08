@@ -31,8 +31,9 @@ class MiniGridEnvRand(Env, Serializable):
             self._maze.wall_prob = 1
             self._maze.seed = 0
             self._maze.reset()
+        obs = self._maze.gen_obs()
 
-        return self._maze.gen_obs()
+        return np.append(obs['image'],obs['direction'])
 
     def sample_goals(self, num_goals):
         return np.random.randint(len(self._genomes), size=(num_goals,))
