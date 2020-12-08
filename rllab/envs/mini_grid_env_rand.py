@@ -8,29 +8,49 @@ from gym_minigrid.envs.mazeEnv import MazeEnv
 
 class MiniGridEnvRand(Env, Serializable):
     
-    def __init__(self,
-                 lava_prob=0, # float(0-0.2); chance to add lava float(0-0.2)
-                 obstacle_level=0, # float(0-5); increase obstacles
-                 box2ball=0, # flaot(0-1) chance to convert box to ball
-                 door_prob=0, # float(0-0.5); chance to add doors
-                 wall_prob=1, # float(0-1); cahnce to keep wall
-                 seed=0
-    ):
+    def __init__(self,genomes=None):
         Serializable.quick_init(self, locals())
-        #TODO: get list of genomes and sample from uniform distribution of 1 to get gene values
-        self._maze = MazeEnv(lava_prob=lava_prob,obstacle_level=obstacle_level,box2ball=box2ball,door_prob=door_prob,wall_prob=wall_prob,seed=seed)
+        self._maze = MazeEnv()
+        if genomes is not None:
+            self._genomes = genomes
+            self.reset(self.sample_goal())
+        else:
+            self._genomes = None
+            self.reset()
 
 
-    def reset(self):
-        self._maze.lava_prob = 0 #TODO
-        self._maze.obstacle_level = 0 #TODO
-        self._maze.box2ball = 0 #TODO
-        self._maze.door_prob = 0 #TODO
-        self._maze.wall_prob = 1 #TODO
-        self._maze.seed = 0 #TODO
+    def reset(self, reset_args=None):
+        if reset_args is not None:
+            self._maze.lava_prob = reset_args['lava_prob']
+            self._maze.obstacle_level = reset_args['obstacle_level']
+            self._maze.box2ball = reset_args['box2ball']
+            self._maze.door_prob = reset_args['door_prob']
+            self._maze.wall_prob = reset_args['wall_prob']
+            self._maze.seed = reset_args['seed']
         self._maze.reset()
 
         return self._maze.gen_obs()
+
+    def sample_goals(self, num_goals):
+        goals = []
+        for i in range(num_goals):
+            goals.append(self.sample_goal())
+        return goals
+
+    def sample_goal(self):
+        if self._genomes is not None:
+            #TODO: modify the goal to be a sample from list of genomes
+            goal = {
+                'lava_prob': 0,
+                'obstacle_level': 0,
+                'box2ball': 0,
+                'door_prob': 0,
+                'wall_prob': 1,
+                'seed': 0
+            }
+        else:
+            goal = None
+        return goal
 
     def step(self, action):
         state, reward, done = self._maze.step(action)
@@ -38,7 +58,7 @@ class MiniGridEnvRand(Env, Serializable):
 
     @property
     def action_space(self):
-        return Discrete(len(self._maze.actions))
+        return Discrete(len(self._maze.actions)-1)
 
     @property
     def observation_space(self):

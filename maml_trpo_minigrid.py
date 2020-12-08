@@ -24,6 +24,7 @@ for fast_learning_rate in fast_learning_rates:
     for bas in baselines:
         stub(globals())
 
+        #TODO: get the list of genomes from POET and use it to initialize MiniGridEnvRand
         env = TfEnv(normalize(MiniGridEnvRand()))
         policy = MAMLCategoricalMLPPolicy(
             name="policy",
