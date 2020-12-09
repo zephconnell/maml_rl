@@ -43,8 +43,8 @@ class MiniGridEnvRand(Env, Serializable):
             self.genomes = [DEFAULT_GENOME]*self.num_unique_mazes
             for i in range(self.num_unique_mazes):
                 self.seeds[i] = i
-                
-        genome_num = np.random.randint(self.num_unique_mazes,1)
+
+        genome_num = np.random.randint(0,self.num_unique_mazes)
         self.reset(genome_num)
 
     def reset(self, reset_args=0):
