@@ -6,7 +6,8 @@ from rllab.envs.normalized_env import normalize
 from rllab.misc.instrument import stub, run_experiment_lite
 from sandbox.rocky.tf.algos.maml_trpo import MAMLTRPO
 from sandbox.rocky.tf.policies.maml_minimal_categorical_mlp_policy import MAMLCategoricalMLPPolicy
-from sandbox.rocky.tf.envs.base import TfEnv
+from sandbox.rocky.tf.envs.base import 
+from load_condensed_genomes import load_condensed_genomes
 
 import tensorflow as tf
 
@@ -24,9 +25,10 @@ for fast_learning_rate in fast_learning_rates:
     for bas in baselines:
         stub(globals())
 
-        #TODO: get the list of genomes from POET and use it to initialize MiniGridEnvRand
-        genomes = None
-        env = TfEnv(normalize(MiniGridEnvRand(genomes)))
+        genomes_file = 'attempt6_envs_condensed.txt'
+        configs = load_condensed_genomes(genomes_file)
+        num_mazes = 20
+        env = TfEnv(normalize(MiniGridEnvRand(configs,num_mazes)))
         policy = MAMLCategoricalMLPPolicy(
             name="policy",
             env_spec=env.spec,
