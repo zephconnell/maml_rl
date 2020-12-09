@@ -14,7 +14,7 @@ fast_learning_rates = [0.1]
 baselines = ['linear']
 fast_batch_size = 20
 meta_batch_size = 60
-max_path_length = 10
+max_path_length = 2000
 num_grad_updates = 1
 meta_step_size = 0.01
 
@@ -25,13 +25,14 @@ for fast_learning_rate in fast_learning_rates:
         stub(globals())
 
         #TODO: get the list of genomes from POET and use it to initialize MiniGridEnvRand
-        env = TfEnv(normalize(MiniGridEnvRand()))
+        genomes = None
+        env = TfEnv(normalize(MiniGridEnvRand(genomes)))
         policy = MAMLCategoricalMLPPolicy(
             name="policy",
             env_spec=env.spec,
             grad_step_size=fast_learning_rate,
             hidden_nonlinearity=tf.nn.relu,
-            hidden_sizes=(40,40),
+            hidden_sizes=(100,100),
         )
         if bas == 'zero':
             baseline = ZeroBaseline(env_spec=env.spec)
@@ -47,7 +48,7 @@ for fast_learning_rate in fast_learning_rates:
             max_path_length=max_path_length,
             meta_batch_size=meta_batch_size,
             num_grad_updates=num_grad_updates,
-            n_itr=2,
+            n_itr=1,
             use_maml=use_maml,
             step_size=meta_step_size,
             plot=False,
