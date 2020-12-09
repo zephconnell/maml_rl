@@ -33,14 +33,15 @@ class MiniGridEnvRand(Env, Serializable):
             self._maze.reset()
         obs = self._maze.gen_obs()
 
-        return np.append(obs['image'],obs['direction'])
+        return np.append(obs['image'],obs['direction']).astype(np.int32)
 
     def sample_goals(self, num_goals):
         return np.random.randint(len(self._genomes), size=(num_goals,))
 
     def step(self, action):
         state, reward, done, _ = self._maze.step(action)
-        return Step(observation=state, reward=reward, done=done)
+        state_flat_array = np.append(state['image'],state['direction']).astype(np.int32)
+        return Step(observation=state_flat_array, reward=reward, done=done)
 
     @property
     def action_space(self):
