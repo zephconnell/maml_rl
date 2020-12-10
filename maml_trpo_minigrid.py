@@ -6,7 +6,7 @@ from rllab.envs.normalized_env import normalize
 from rllab.misc.instrument import stub, run_experiment_lite
 from sandbox.rocky.tf.algos.maml_trpo import MAMLTRPO
 from sandbox.rocky.tf.policies.maml_minimal_categorical_mlp_policy import MAMLCategoricalMLPPolicy
-from sandbox.rocky.tf.envs.base import 
+from sandbox.rocky.tf.envs.base import TfEnv
 from load_condensed_genomes import load_condensed_genomes
 
 import tensorflow as tf
@@ -15,7 +15,7 @@ fast_learning_rates = [0.1]
 baselines = ['linear']
 fast_batch_size = 20
 meta_batch_size = 60
-max_path_length = 2000
+max_path_length = 10
 num_grad_updates = 1
 meta_step_size = 0.01
 
@@ -28,7 +28,7 @@ for fast_learning_rate in fast_learning_rates:
         genomes_file = 'attempt6_envs_condensed.txt'
         configs = load_condensed_genomes(genomes_file)
         num_mazes = 20
-        env = TfEnv(normalize(MiniGridEnvRand(configs,num_mazes)))
+        env = TfEnv(normalize(MiniGridEnvRand(configs=configs,num_mazes=num_mazes)))
         policy = MAMLCategoricalMLPPolicy(
             name="policy",
             env_spec=env.spec,
@@ -58,7 +58,7 @@ for fast_learning_rate in fast_learning_rates:
         run_experiment_lite(
             algo.train(),
             n_parallel=1,
-            snapshot_mode="none",
+            snapshot_mode="last",
             seed=1,
             exp_prefix='trpo_maml_minigrid',
             exp_name='trpo_maml'+str(int(use_maml))+'_fbs'+str(fast_batch_size)+'_mbs'+str(meta_batch_size)+'_flr' + str(fast_learning_rate) + '_metalr' + str(meta_step_size) +'_step'+str(num_grad_updates),
