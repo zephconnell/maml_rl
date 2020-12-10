@@ -1,11 +1,8 @@
 from rllab.envs.mini_grid_env_rand import MiniGridEnvRand
 from rllab.baselines.linear_feature_baseline import LinearFeatureBaseline
-from rllab.envs.mujoco.walker2d_env import Walker2DEnv
 from rllab.envs.normalized_env import normalize
 from rllab.misc.instrument import stub, run_experiment_lite
 from sandbox.rocky.tf.algos.vpg import VPG
-from sandbox.rocky.tf.algos.trpo import TRPO
-from sandbox.rocky.tf.policies.minimal_gauss_mlp_policy import GaussianMLPPolicy
 from sandbox.rocky.tf.envs.base import TfEnv
 from load_condensed_genomes import load_condensed_genomes
 
