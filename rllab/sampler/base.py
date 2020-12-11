@@ -1,4 +1,4 @@
-
+import tensorflow as tf
 
 import numpy as np
 from rllab.misc import special
@@ -89,7 +89,11 @@ class BaseSampler(Sampler):
             advantages = tensor_utils.concat_tensor_list([path["advantages"] for path in paths])
             env_infos = tensor_utils.concat_tensor_dict_list([path["env_infos"] for path in paths])
             agent_infos = tensor_utils.concat_tensor_dict_list([path["agent_infos"] for path in paths])
-
+            #print("len(paths): ",len(paths[0]))
+            #for k,v in agent_infos.items():
+            #    print("agent info: k: ",k," v: ",v)
+            agent_infos["prob"] = np.array(agent_infos["prob"]).reshape(-1,6)
+            #print("agent_info_probs: ",agent_info_probs)
             if self.algo.center_adv:
                 advantages = util.center_advantages(advantages)
 

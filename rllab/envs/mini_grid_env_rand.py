@@ -47,7 +47,9 @@ class MiniGridEnvRand(Env, Serializable):
         genome_num = np.random.randint(0,self.num_unique_mazes)
         self.reset(genome_num)
 
-    def reset(self, reset_args=0):
+    def reset(self, reset_args=None):
+        if reset_args is None:
+            reset_args = 0	
         genome = self.genomes[reset_args]
         self._maze.seed(self.seeds[reset_args])
         self._maze.lava_prob = self._maze.np_random.uniform(*genome['lava_prob'])

@@ -36,8 +36,8 @@ all_avg_returns = []
 for step_i, initial_params_file in zip(range(len(step_sizes)), initial_params_files):
     avg_returns = []
     config = [None]*1
-    for i in range(test_num_mazes):
-        config[0] = configs[i]
+    for i in range(1):
+        config[0] = configs[13]
         env = TfEnv(normalize(MiniGridEnvRand(configs=config,num_mazes=num_mazes)))
         baseline = LinearFeatureBaseline(env_spec=env.spec)
         algo = VPG(
@@ -45,9 +45,9 @@ for step_i, initial_params_file in zip(range(len(step_sizes)), initial_params_fi
             policy=None,
             load_policy=initial_params_file,
             baseline=baseline,
-            batch_size=100,
-            max_path_length=10,
-            n_itr=2,
+            batch_size=4000,
+            max_path_length=200,
+            n_itr=5,
             optimizer_args={'init_learning_rate': step_sizes[step_i], 'tf_optimizer_args': {'learning_rate': 0.5*step_sizes[step_i]}, 'tf_optimizer_cls': tf.train.GradientDescentOptimizer}
         )
 
@@ -57,13 +57,13 @@ for step_i, initial_params_file in zip(range(len(step_sizes)), initial_params_fi
             n_parallel=1,
             # Only keep the snapshot parameters for the last iteration
             snapshot_mode="last",
-            exp_prefix='trpo_minigrid_test',
+            exp_prefix='trpo_minigrid_test_14',
             exp_name='test',
             #plot=True,
         )
-        import pdb; pdb.set_trace()
+        #import pdb; pdb.set_trace()
         # get return from the experiment
-        with open('data/local/trpo-minigrid-test/test/progress.csv', 'r') as f:
+        """with open('data/local/trpo-minigrid-test-14/test/progress.csv', 'r') as f:
             reader = csv.reader(f, delimiter=',')
             i = 0
             row = None
@@ -92,5 +92,5 @@ for i in range(len(initial_params_files)):
     with open(exp_names[i] + '.pkl', 'w') as f:
         pickle.dump(results, f)
 
-import pdb; pdb.set_trace()
+#import pdb; pdb.set_trace()"""
 

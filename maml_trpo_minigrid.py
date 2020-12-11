@@ -15,7 +15,7 @@ fast_learning_rates = [0.1]
 baselines = ['linear']
 fast_batch_size = 20
 meta_batch_size = 60
-max_path_length = 10
+max_path_length = 200
 num_grad_updates = 1
 meta_step_size = 0.01
 
@@ -25,9 +25,9 @@ for fast_learning_rate in fast_learning_rates:
     for bas in baselines:
         stub(globals())
 
-        genomes_file = 'attempt6_envs_condensed.txt'
+        genomes_file = 'liberal_repro_03_genomes.txt'
         configs = load_condensed_genomes(genomes_file)
-        num_mazes = 20
+        num_mazes = 14
         env = TfEnv(normalize(MiniGridEnvRand(configs=configs,num_mazes=num_mazes)))
         policy = MAMLCategoricalMLPPolicy(
             name="policy",
@@ -50,7 +50,7 @@ for fast_learning_rate in fast_learning_rates:
             max_path_length=max_path_length,
             meta_batch_size=meta_batch_size,
             num_grad_updates=num_grad_updates,
-            n_itr=1,
+            n_itr=800,
             use_maml=use_maml,
             step_size=meta_step_size,
             plot=False,
@@ -58,7 +58,7 @@ for fast_learning_rate in fast_learning_rates:
         run_experiment_lite(
             algo.train(),
             n_parallel=1,
-            snapshot_mode="last",
+            snapshot_mode="all",
             seed=1,
             exp_prefix='trpo_maml_minigrid',
             exp_name='trpo_maml'+str(int(use_maml))+'_fbs'+str(fast_batch_size)+'_mbs'+str(meta_batch_size)+'_flr' + str(fast_learning_rate) + '_metalr' + str(meta_step_size) +'_step'+str(num_grad_updates),
